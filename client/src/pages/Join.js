@@ -4,13 +4,17 @@ import { Route } from 'react-router-dom'
 import { Link } from "react-router-dom";
 
 class Join extends Component {
-  state = {
-    readyUser: {
-      id: "",
-      password: "",
-      confirmPassword: "",
-    },
-  };
+  constructor() {
+    super();
+    this.state = {
+      readyUser: {
+        userName: "",
+        password: "",
+        confirmPassword: "",
+      },
+    };
+  }
+
 
 
   componentDidMount() {
@@ -72,7 +76,7 @@ class Join extends Component {
               <div className="login-group">
                 <form>
                   <label>3자 이상, 알파벳 대소문자</label><br />
-                  <input type="text" name="id" placeholder="New ID (3자 이상)" className="sign-input" onChange={this.handleChange}></input><br />
+                  <input type="text" name="userName" placeholder="New UserName (3자 이상)" className="sign-input" onChange={this.handleChange}></input><br />
                   <label>4자 이상</label><br />
                   <input type="password" name="password" placeholder="New Password (4자 이상)" className="sign-input" onChange={this.handleChange}></input><br />
                   <label>비밀번호를 한번 더 입력해주세요.</label><br />

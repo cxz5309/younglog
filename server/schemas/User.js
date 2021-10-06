@@ -2,18 +2,18 @@ import mongoose from 'mongoose';
 
 const { Schema } = mongoose;
 const UserSchema = new Schema({
-  id: {
+  userName: {
     type: String,
-    required: true
+    required: true,
   },
   password: {
     type: String,
-    required: true
+    required: true,
   },
   date: {
     type: Date,
-    required: true
-  }
+    required: true,
+  },
 });
 
 UserSchema.virtual('uid').get(function () {

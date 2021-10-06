@@ -3,19 +3,22 @@ import axios from 'axios';
 import { Redirect, useHistory } from 'react-router-dom'
 import Header from '../components/Header';
 class UpdatePost extends Component {
-  state = {
-    readyPost: {
-      uid: "",
-      userName: "",
-      userPwd: "",
-      title: "",
-      description: "",
-      date: new Date(),
-      views: 0,
-    },
-    userId: '',
-    submitType: 'update',
-  };
+  constructor() {
+    super();
+    this.state = {
+      readyPost: {
+        uid: "",
+        userName: "",
+        userPwd: "",
+        title: "",
+        description: "",
+        date: new Date(),
+        views: 0,
+      },
+      userId: '',
+      submitType: 'update',
+    };
+  }
 
   componentDidMount() {
     console.log(this.props.match.params.id);
@@ -29,6 +32,9 @@ class UpdatePost extends Component {
         .then((res) => {
           console.log(res.data);
           this.setState({ readyPost: res.data.post });
+          let readyPost = { ...this.state.readyPost }
+          readyPost['userPwd'] = '';
+          this.setState({ readyPost })
         })
     }
     catch (error) {
@@ -44,40 +50,48 @@ class UpdatePost extends Component {
     console.log(payload);
 
     if (this.state.submitType === 'update') {
-      try {
-        await axios
-          .patch('/api/update-post/' + this.props.match.params.id, payload)
-          .then((res) => {
-            console.log(res.data);
-            alert('업데이트 성공!');
+      await axios
+        .patch('/api/update-post/' + this.props.match.params.id, payload)
+        .then((res) => {
+          console.log(res.data);
+          alert('업데이트 성공!');
+          this.props.history.push("/")
+        }).catch((error) => {
+          if (error.response) {
+            alert(error.response.data.message);
             this.props.history.push("/")
-          })
-      }
-      catch (error) {
-        console.log(error);
-        alert('업데이트 실패!');
-        this.props.history.push("/")
-      }
+          }
+          else {
+            console.log(error);
+            alert('업데이트 실패!');
+            this.props.history.push("/")
+          }
+        });
     }
     else {
-      try {
-        await axios
-          .delete('/api/delete-post/' + this.props.match.params.id, {
-            data: {
-              userPwd: this.state.readyPost.userPwd,
-            }
-          })
-          .then((res) => {
-            console.log(res.data);
-            alert('삭제 성공!');
+      const userPwd = this.state.readyPost.userPwd;
+      await axios
+        .delete('/api/delete-post/' + this.props.match.params.id, {
+          data: {
+            userPwd,
+          }
+        })
+        .then((res) => {
+          console.log(res.data);
+          alert('삭제 성공!');
+          this.props.history.push("/")
+        })
+        .catch((error) => {
+          if (error.response) {
+            alert(error.response.data.message);
             this.props.history.push("/")
-          })
-      }
-      catch (error) {
-        console.log(error);
-        alert('삭제 실패!');
-        this.props.history.push("/")
-      }
+          }
+          else {
+            console.log(error);
+            alert('삭제 실패!');
+            this.props.history.push("/")
+          }
+        });
     }
   }
 
@@ -90,8 +104,6 @@ class UpdatePost extends Component {
   render() {
     return (
       <div>
-        <Header />
-
         <main>
           <section>
             <form onSubmit={this.handleSubmit}>
@@ -105,7 +117,7 @@ class UpdatePost extends Component {
               </div>
               <label className="form-label">비밀번호</label>
               <div className="input-group mb-3">
-                <input type="text" id="password" className="form-control" name="userPwd" onChange={this.handleChange}></input>
+                <input type="text" id="password" className="form-control" name="userPwd" value={this.state.readyPost.userPwd} onChange={this.handleChange}></input>
               </div>
               <label className="form-label">내용</label>
               <div className="input-group mb-3">

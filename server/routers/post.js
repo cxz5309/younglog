@@ -19,7 +19,7 @@ const postCreatePost = async (req, res, next) => {
   // db create
   try {
     await Post.create({
-      title, description, userName, userPwd, date, views
+      title, description, userName, userPwd, date, views,
     });
     return res.send({ message: '게시글을 생성하였습니다' });
   } catch (error) {
@@ -53,7 +53,7 @@ const patchUpdatePost = async (req, res) => {
   try {
     await thisPost.updateOne({
       $set: {
-        title, userName, userPwd, description
+        title, userName, userPwd, description,
       }
     });
     return res.send({ message: '게시글을 수정하였습니다' });

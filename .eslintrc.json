@@ -24,9 +24,6 @@
       "error",
       "always"
     ],
-    "comma-dangle": [
-      "error", "never"
-    ],
     "import/extensions": [
       "error", "always"
     ]

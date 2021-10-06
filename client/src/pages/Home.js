@@ -8,11 +8,15 @@ import Header from '../components/Header';
 import { Link } from "react-router-dom";
 
 class Home extends Component {
-  state = {
-    pList: [],
-    rList: [],
-    isLogin: false,
-  };
+  constructor() {
+    super();
+    this.state = {
+      pList: [],
+      rList: [],
+      userName: '',
+    };
+  }
+
 
   // date: "2021. 9. 29."
   // description: "r"
@@ -42,16 +46,17 @@ class Home extends Component {
     })
       .then((res) => {
         if (res.data.user) {
+          console.log(res.data.user);
           console.log('자동으로 로그인되었습니다!');
-          this.setState({ isLogin: true });
+          this.setState({ userName: res.data.user.userName });
         }
         else {
-          this.setState({ isLogin: false });
+          this.setState({ userName: '' });
           throw '알수 없는 오류가 있어 로그인되지 않았습니다.';
         }
       })
       .catch((error) => {
-        this.setState({ isLogin: false });
+        this.setState({ userName: '' });
         console.log('로그인되어있지 않습니다.');
       });
   }
@@ -80,14 +85,14 @@ class Home extends Component {
   render() {
     let popularData = [...this.state.pList];
     let recentData = [...this.state.rList];
-    const isLogin = this.state.isLogin;
+    const userName = this.state.userName;
     return (
       <div>
-        <Header isLogin={isLogin} logout={this.logout} />
+        <Header userName={userName} logout={this.logout} />
         <main>
           <section className="headline">
             <div>
-              {isLogin && <Link to='/create-post'>CreatePost</Link>}
+              {userName.length > 0 && <Link to='/create-post'>CreatePost</Link>}
             </div>
           </section>
           <section className="popular-post">

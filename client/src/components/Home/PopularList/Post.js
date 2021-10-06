@@ -2,17 +2,21 @@ import { Component } from "react";
 import { Link } from "react-router-dom";
 
 class Post extends Component {
-  state = {
-    readyPost: {
-      uid: "",
-      userName: "",
-      userPwd: "",
-      title: "",
-      description: "",
-      date: "",
-      views: 0,
-    },
-  };
+  constructor() {
+    super();
+    this.state = {
+      readyPost: {
+        uid: "",
+        userName: "",
+        userPwd: "",
+        title: "",
+        description: "",
+        date: "",
+        views: 0,
+      },
+    };
+  }
+
 
   componentDidMount() {
     this.setState({ readyPost: this.props.data })

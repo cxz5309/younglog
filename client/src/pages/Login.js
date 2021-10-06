@@ -4,12 +4,16 @@ import { Route } from 'react-router-dom'
 import { Link } from "react-router-dom";
 
 class Login extends Component {
-  state = {
-    readyUser: {
-      id: "",
-      password: "",
-    }
-  };
+  constructor() {
+    super();
+    this.state = {
+      readyUser: {
+        userName: "",
+        password: "",
+      }
+    };
+  }
+
 
 
   componentDidMount() {
@@ -29,19 +33,23 @@ class Login extends Component {
     e.preventDefault();
     const payload = this.state.readyUser;
 
-    try {
-      await axios.post('/api/login', payload)
-        .then((res) => {
-          console.log(res.data);
-          localStorage.setItem('token', res.data.token);
-          alert('로그인되었습니다!');
-          this.props.history.push("/")
-        });
-    }
-    catch {
-      alert('로그인에 실패했습니다!');
-      this.props.history.push("/")
-    }
+    await axios.post('/api/login', payload)
+      .then((res) => {
+        console.log(res.data);
+        localStorage.setItem('token', res.data.token);
+        alert('로그인되었습니다!');
+        this.props.history.push("/")
+      })
+      .catch((error) => {
+        if (error.response) {
+          console.log(error.response);
+          alert(error.response.data.message)
+        }
+        else {
+          console.log(error);
+          alert('로그인에 실패했습니다!')
+        }
+      });
   }
 
   handleChange = (e) => {
@@ -61,8 +69,8 @@ class Login extends Component {
             <form>
               <div className="col-12">
                 <div className="login-group">
-                  <label htmlFor="userid">ID</label><br />
-                  <input type="username" id="userid" name="id" placeholder="ID" className="sign-input" onChange={this.handleChange}></input><br /><br />
+                  <label htmlFor="userName">UserName</label><br />
+                  <input type="username" id="userName" name="userName" placeholder="UserName" className="sign-input" onChange={this.handleChange}></input><br /><br />
                   <label htmlFor="userpw">Password</label><br />
                   <input type="password" id="userpw" name="password" placeholder="Password"
                     className="sign-input" onChange={this.handleChange}></input><br /><br />

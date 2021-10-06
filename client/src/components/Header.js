@@ -5,12 +5,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { fas, faBars } from '@fortawesome/free-solid-svg-icons'
 import { render } from '@testing-library/react';
 
-library.add(fas, faBars);
 
 class Header extends Component {
+  constructor() {
+    super();
+    library.add(fas, faBars);
+  }
 
   render() {
-    let isLogin = this.props.isLogin;
+
     return (
       <header>
         <div className='row'>
@@ -20,7 +23,7 @@ class Header extends Component {
           <div className='nav-items'>
             <Link to='/join' className="nav-item col-2"> 회원가입 </Link>
             {
-              isLogin
+              this.props.userName.length > 0
                 ? <span onClick={this.props.logout}>로그아웃</span>
                 : <Link to='/login' className="nav-item col-2"> 로그인 </Link>
             }

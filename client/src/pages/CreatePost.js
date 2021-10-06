@@ -4,17 +4,21 @@ import { Redirect, useHistory } from 'react-router-dom'
 import Header from '../components/Header';
 
 class CreatePost extends Component {
-  state = {
-    readyPost: {
-      uid: "",
-      userName: "",
-      userPwd: "",
-      title: "",
-      description: "",
-      date: new Date(),
-      views: 0,
-    },
-  };
+  constructor() {
+    super();
+    this.state = {
+      readyPost: {
+        uid: "",
+        userName: "",
+        userPwd: "",
+        title: "",
+        description: "",
+        date: new Date(),
+        views: 0,
+      },
+    };
+
+  }
 
 
   handleSubmit = async (e) => {
@@ -48,7 +52,6 @@ class CreatePost extends Component {
   render() {
     return (
       <div>
-        <Header />
         <main>
           <section>
             <form onSubmit={this.handleSubmit}>

@@ -14,9 +14,8 @@ class Post extends Component {
     },
   };
 
-  componentDidMount() {    
-    console.log(this.props.data);
-    this.setState({ readyPost: this.props.data})
+  componentDidMount() {
+    this.setState({ readyPost: this.props.data })
   }
 
   render() {
@@ -28,23 +27,23 @@ class Post extends Component {
     const description = this.state.readyPost.description;
     return (
 
-    <Link to={'/read-post/' + id } >
-      <article className="row">
-        <div className="thumbnail-box col-3">
-          {/* <img className="thumbnail col-3" src="<%= recentPosts[i].thumbnail %>" alt="썸네일"/> */}
-        </div>
-        <div className="recent-content col-9">
-          <div className="recent-title">{ title }</div>
-          <div className="recent-info row">
-            <div className="created-date col-3">{ date }</div>
-            <div className="writer col-9">{ username }</div>
+      <Link to={'/read-post/' + id} >
+        <article className="row">
+          <div className="thumbnail-box col-3">
+            {/* <img className="thumbnail col-3" src="<%= recentPosts[i].thumbnail %>" alt="썸네일"/> */}
           </div>
-          <div className="recent-desc">
-            { description }
+          <div className="recent-content col-9">
+            <div className="recent-title">{title}</div>
+            <div className="recent-info row">
+              <div className="created-date col-3">{date}</div>
+              <div className="writer col-9">{username}</div>
+            </div>
+            <div className="recent-desc">
+              {description}
+            </div>
           </div>
-        </div>
-      </article>
-    </Link>
+        </article>
+      </Link>
     )
   }
 }

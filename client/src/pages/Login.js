@@ -4,6 +4,13 @@ import { Route } from 'react-router-dom'
 import { Link } from "react-router-dom";
 
 class Login extends Component {
+  state = {
+    readyUser: {
+      id: "",
+      password: "",
+    }
+  };
+
 
   componentDidMount() {
     this.getMe();
@@ -18,12 +25,17 @@ class Login extends Component {
     })
   }
 
-  login = async () => {
+  login = async (e) => {
+    e.preventDefault();
+    const payload = this.state.readyUser;
+
     try {
-      await axios.post('/api/join')
+      await axios.post('/api/login', payload)
         .then((res) => {
           console.log(res.data);
           localStorage.setItem('token', res.data.token);
+          alert('로그인되었습니다!');
+          this.props.history.push("/")
         });
     }
     catch {
@@ -31,6 +43,12 @@ class Login extends Component {
       this.props.history.push("/")
     }
   }
+
+  handleChange = (e) => {
+    let readyUser = { ...this.state.readyUser }
+    readyUser[e.target.name] = e.target.value;
+    this.setState({ readyUser })
+  };
 
   render() {
     return (
@@ -40,19 +58,23 @@ class Login extends Component {
             <div className="col-12">
               <h1>Travel-Reviews 로그인</h1>
             </div>
-            <div className="col-12">
-              <div className="login-group">
-                <input type="username" id="userid" name="username" placeholder="User ID" className="sign-input"></input><br /><br />
-                <input type="password" id="userpw" name="password" placeholder="User Password"
-                  className="sign-input"></input><br /><br />
+            <form>
+              <div className="col-12">
+                <div className="login-group">
+                  <label htmlFor="userid">ID</label><br />
+                  <input type="username" id="userid" name="id" placeholder="ID" className="sign-input" onChange={this.handleChange}></input><br /><br />
+                  <label htmlFor="userpw">Password</label><br />
+                  <input type="password" id="userpw" name="password" placeholder="Password"
+                    className="sign-input" onChange={this.handleChange}></input><br /><br />
+                </div>
               </div>
-            </div>
-            <div className="col-12">
-              <button type="submit" onclick={this.login} className="box-btn login-box">로그인</button>
-              <button className="box-btn">
-                <Link to="/join">회원가입</Link>
-              </button>
-            </div>
+              <div className="col-12">
+                <button type="submit" onClick={this.login} className="box-btn login-box">로그인</button>
+                <button className="box-btn">
+                  <Link to="/join">회원가입</Link>
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       </main>

@@ -45,7 +45,7 @@ class Join extends Component {
       .catch((error) => {
         if (error.response) {
           console.log(error.response);
-          alert(error.response.data.message)//TODO: joi 오류 메세지 커스텀
+          alert(error.response.data.message)
         }
         else {
           alert(error)

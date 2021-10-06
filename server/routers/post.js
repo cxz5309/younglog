@@ -5,7 +5,7 @@ const router = express.Router();
 
 const getHomePosts = async (req, res) => {
   const popularPosts = await Post.find({}).sort('-views').limit(2);
-  const recentPosts = await Post.find({}).sort('date');
+  const recentPosts = await Post.find({}).sort('-date');
 
   res.send({ popularList: popularPosts, recentList: recentPosts });
 };

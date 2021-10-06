@@ -19,25 +19,31 @@ router.get('/me', authMiddleware, async (req, res, next) => {
 });
 
 router.post('/join', async (req, res) => {
-  const { id, password, confirmPassword } =
-    await userPostSchema.validateAsync(req.body)
-      .catch((error) => res.status(400).send({ message: error.details }));
-  const date = new Date();
+  try {
+    const { id, password, confirmPassword } =
+      await userPostSchema.validateAsync(req.body)
+        .catch((error) => {
+          throw error.details[0].message;
+        });
+    const date = new Date();
 
-  const existId = await User.findOne({ id });
-  if (existId) {
-    return res.status(400).send({ message: '이미 존재하는 아이디입니다' });
+    const existId = await User.findOne({ id });
+    if (existId) {
+      return res.status(400).send({ message: '이미 존재하는 아이디입니다' });
+    }
+
+    const user = new User({ id, password, date });
+    await user.save();
+
+    return res.status(201).send({ message: '정상적으로 회원가입하였습니다!' });
+  } catch (error) {
+    return res.status(400).send({ message: error });
   }
-
-  const user = new User({ id, password, date });
-  await user.save().catch((error) => console.log(error));
-
-  return res.status(201).send({ message: '정상적으로 회원가입하였습니다!' });
 });
 
-router.post('/auth', async (req, res) => {
+router.post('/login', async (req, res) => {
   const { id, password } = req.body;
-
+  console.log(req.body);
   const user = await User.findOne({ id, password });
   if (!user) {
     res.status(401).send({

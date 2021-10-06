@@ -14,9 +14,8 @@ class Post extends Component {
     },
   };
 
-  componentDidMount() {    
-    console.log(this.props.data);
-    this.setState({ readyPost: this.props.data})
+  componentDidMount() {
+    this.setState({ readyPost: this.props.data })
   }
 
   render() {
@@ -27,16 +26,16 @@ class Post extends Component {
     const description = this.state.readyPost.description;
 
     return (
-      <Link to={`/read-post/${ id }`}>
+      <Link to={`/read-post/${id}`}>
         <article className="view-all col-2">
           <div className="popular-content">
-            <div className="popular-title">{ title }</div>
+            <div className="popular-title">{title}</div>
             <div className="popular-info row">
-              <div className="created-date col-4">{ date }</div>
-              <div className="writer col-8">{ username }</div>
+              <div className="created-date col-4">{date}</div>
+              <div className="writer col-8">{username}</div>
             </div>
             <div className="popular-desc">
-              <div>{ description }</div>
+              <div>{description}</div>
             </div>
           </div>
         </article>

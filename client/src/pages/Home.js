@@ -11,6 +11,7 @@ class Home extends Component {
   state = {
     pList: [],
     rList: [],
+    isLogin: false,
   };
 
   // date: "2021. 9. 29."
@@ -24,8 +25,37 @@ class Home extends Component {
   // uid: "615472023afd20d3915a872f"
 
   componentDidMount() {
+    this.getMe();
     this.getList();
   }
+
+  logout = () => {
+    localStorage.removeItem(`token`)
+    alert('로그아웃되었습니다!');
+
+    window.location.reload();
+  }
+
+  getMe = async () => {
+    await axios.get('/api/me', {
+      headers: { authorization: `Bearer ${localStorage.getItem('token')}` },
+    })
+      .then((res) => {
+        if (res.data.user) {
+          console.log('자동으로 로그인되었습니다!');
+          this.setState({ isLogin: true });
+        }
+        else {
+          this.setState({ isLogin: false });
+          throw '알수 없는 오류가 있어 로그인되지 않았습니다.';
+        }
+      })
+      .catch((error) => {
+        this.setState({ isLogin: false });
+        console.log('로그인되어있지 않습니다.');
+      });
+  }
+
   getList = async () => {
     await axios.get('/api')
       .then((res) => {
@@ -39,21 +69,26 @@ class Home extends Component {
           alert(error.response.data.message);
           this.props.history.push("/")
         }
-        console.log(error);
-        alert('페이지 로딩 실패!');
-        this.props.history.push("/")
+        else {
+          console.log(error);
+          alert('페이지 로딩 실패!');
+          this.props.history.push("/")
+        }
       });
   }
 
   render() {
     let popularData = [...this.state.pList];
     let recentData = [...this.state.rList];
+    const isLogin = this.state.isLogin;
     return (
       <div>
-        <Header />
+        <Header isLogin={isLogin} logout={this.logout} />
         <main>
           <section className="headline">
-            <Link to='/create-post'>CreatePost</Link>
+            <div>
+              {isLogin && <Link to='/create-post'>CreatePost</Link>}
+            </div>
           </section>
           <section className="popular-post">
             <PopularList datas={popularData} />

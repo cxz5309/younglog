@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="js/homeAjax.js"></script>
+</head>
+<body>
+  <button onclick="createPost()">회원가입</button>
+  <button>로그인</button>
+  <div onclick=`href=/detail`>
+    <p>title</p>
+    <p>user</p>
+    <p>description</p>
+    <div id="comments">
+      <form action="/api/add-comment" method="post">
+        <input type="button" value="댓글">
+        <input type="button" value="취소">
+      </form>
+      <form method="post">
+        <input type="button" value="수정">
+        <input type="button" value="삭제">
+      </form>
+      <div id="comment">
+        <p>user</p>
+        <p>create-date</p>
+        <p>description</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

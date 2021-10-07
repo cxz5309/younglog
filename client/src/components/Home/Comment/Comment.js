@@ -1,8 +1,5 @@
 import axios from 'axios';
 import { Component } from "react";
-import { Link } from 'react-router-dom';
-import { render } from '@testing-library/react';
-import { headers } from './../../../constants/constants';
 
 class Comment extends Component {
   constructor() {
@@ -23,6 +20,10 @@ class Comment extends Component {
     const payload = this.state.readyUpdateContent;
     const token = localStorage.getItem('token');
     console.log(token);
+    if (payload.length === 0) {
+      alert('댓글 내용을 입력해주세요');
+      return;
+    }
     await axios.patch('/api/edit-comments/' + this.props.comment.uid,
       { contents: payload },
       { headers: { authorization: `Bearer ${token}` } })
@@ -76,10 +77,12 @@ class Comment extends Component {
               <div className="comment-date">{this.props.comment.date}</div><br />
               <div className="comment-content">{this.props.comment.contents}</div>
             </div>
-            <div>
-              <button onClick={() => this.handleClick('update')}>수정</button>
-              <button onClick={() => this.handleClick('delete')}>삭제</button>
-            </div>
+            {this.props.userName === this.props.comment.writer &&
+              <div>
+                <button onClick={() => this.handleClick('update')}>수정</button>
+                <button onClick={() => this.handleClick('delete')}>삭제</button>
+              </div>
+            }
           </div>
         )
       case 'update':
@@ -94,17 +97,28 @@ class Comment extends Component {
                 value={this.state.readyUpdateContent}>
               </input>
             </div>
-            <div>
-              <button onClick={() => this.handleClick('ready')}>수정 취소</button>
-              <button onClick={() => this.submitUpdate()}>수정 확인</button>
-            </div>
+            {this.props.userName === this.props.comment.writer &&
+              <div>
+                <button onClick={() => this.handleClick('ready')}>수정 취소</button>
+                <button onClick={() => this.submitUpdate()}>수정 확인</button>
+              </div>
+            }
           </div>
         )
       case 'delete':
         return (
           <div>
-            <button onClick={() => this.handleClick('ready')}>삭제 취소</button>
-            <button onClick={() => this.submitDelete()}>삭제 확인</button>
+            <div className="comment">
+              <div className="comment-writer">{this.props.comment.writer}</div>
+              <div className="comment-date">{this.props.comment.date}</div><br />
+              <div className="comment-content">{this.props.comment.contents}</div>
+            </div>
+            {this.props.userName === this.props.comment.writer &&
+              <div>
+                <button onClick={() => this.handleClick('ready')}>삭제 취소</button>
+                <button onClick={() => this.submitDelete()}>삭제 확인</button>
+              </div>
+            }
           </div>
         )
     }

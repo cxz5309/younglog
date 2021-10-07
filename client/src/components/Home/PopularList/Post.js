@@ -31,7 +31,7 @@ class Post extends Component {
 
     return (
       <Link to={`/read-post/${id}`}>
-        <article className="view-all col-2">
+        <article>
           <div className="popular-content">
             <div className="popular-title">{title}</div>
             <div className="popular-info row">

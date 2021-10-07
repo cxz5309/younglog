@@ -1,7 +1,5 @@
 import { Component } from 'react';
 import axios from 'axios';
-import { Route } from 'react-router-dom'
-
 import PopularList from '../components/Home/PopularList/PopularList';
 import RecentList from '../components/Home/RecentList/RecentList';
 import Header from '../components/Header';
@@ -57,7 +55,8 @@ class Home extends Component {
       })
       .catch((error) => {
         this.setState({ userName: '' });
-        console.log('로그인되어있지 않습니다.');
+        console.log(error);
+        console.log('로그인이 필요합니다');
       });
   }
 

@@ -20,6 +20,31 @@ class CreatePost extends Component {
 
   }
 
+  componentDidMount() {
+    this.getMe();
+  };
+
+  getMe = async () => {
+    await axios.get('/api/me', {
+      headers: { authorization: `Bearer ${localStorage.getItem('token')}` },
+    })
+      .then((res) => {
+        if (res.data.user) {
+          console.log('자동으로 로그인되었습니다!');
+          this.setState({ userName: res.data.user.userName });
+        }
+        else {
+          this.setState({ userName: '' });
+          throw '알수 없는 오류가 있어 로그인되지 않았습니다.';
+        }
+      })
+      .catch((error) => {
+        this.setState({ userName: '' });
+        console.log(error);
+        alert('로그인이 필요합니다. 메인 페이지로 이동합니다.');
+        this.props.history.push("/")
+      });
+  }
 
   handleSubmit = async (e) => {
     e.preventDefault();

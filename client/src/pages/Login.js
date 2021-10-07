@@ -62,9 +62,9 @@ class Login extends Component {
     return (
       <main className="sign-page">
         <div className="container">
-          <div className="row travel-group">
+          <div className="row">
             <div className="col-12">
-              <h1>Travel-Reviews 로그인</h1>
+              <h1>로그인</h1>
             </div>
             <form>
               <div className="col-12">

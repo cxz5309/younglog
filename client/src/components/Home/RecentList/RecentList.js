@@ -4,7 +4,7 @@ import Post from './Post'
 
 class RecentList extends Component {
   render() {
-    
+
     return (
       <div className="recent-post-box">
         <div className="recent-header row">
@@ -15,7 +15,6 @@ class RecentList extends Component {
           {this.props.datas.map((data, index) => (
             <span key={index}>
               <Post data={data} />
-              {" ------- recent end -------- "}
             </span>
           ))}
         </div>

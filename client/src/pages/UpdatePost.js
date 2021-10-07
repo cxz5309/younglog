@@ -15,20 +15,44 @@ class UpdatePost extends Component {
         date: new Date(),
         views: 0,
       },
-      userId: '',
+      postId: '',
+      userName: '',
       submitType: 'update',
     };
   }
 
   componentDidMount() {
-    console.log(this.props.match.params.id);
-    this.setState({ userId: this.props.match.params.id });
+    this.setState({ postId: this.props.match.params.id });
+    this.getMe();
     this.getPost();
   };
 
+
+  getMe = async () => {
+    await axios.get('/api/me', {
+      headers: { authorization: `Bearer ${localStorage.getItem('token')}` },
+    })
+      .then((res) => {
+        if (res.data.user) {
+          console.log('자동으로 로그인되었습니다!');
+          this.setState({ userName: res.data.user.userName });
+        }
+        else {
+          this.setState({ userName: '' });
+          throw '알수 없는 오류가 있어 로그인되지 않았습니다.';
+        }
+      })
+      .catch((error) => {
+        this.setState({ userName: '' });
+        console.log(error);
+        alert('로그인이 필요합니다. 메인 페이지로 이동합니다.');
+        this.props.history.push("/")
+      });
+  }
+
   getPost = async () => {
     try {
-      await axios.get('/api/update-post/' + this.props.match.params.id)
+      await axios.get('/api/update-post/' + this.state.postId)
         .then((res) => {
           console.log(res.data);
           this.setState({ readyPost: res.data.post });
@@ -51,7 +75,7 @@ class UpdatePost extends Component {
 
     if (this.state.submitType === 'update') {
       await axios
-        .patch('/api/update-post/' + this.props.match.params.id, payload)
+        .patch('/api/update-post/' + this.state.postId, payload)
         .then((res) => {
           console.log(res.data);
           alert('업데이트 성공!');
@@ -71,7 +95,7 @@ class UpdatePost extends Component {
     else {
       const userPwd = this.state.readyPost.userPwd;
       await axios
-        .delete('/api/delete-post/' + this.props.match.params.id, {
+        .delete('/api/delete-post/' + this.state.postId, {
           data: {
             userPwd,
           }

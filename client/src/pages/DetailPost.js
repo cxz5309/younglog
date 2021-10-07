@@ -27,7 +27,9 @@ class DetailPost extends Component {
 
   componentDidMount() {
     console.log(this.props.match.params.id);
+    console.log(this.setState.userName);
     this.getMe();
+    console.log(this.setState.userName);
     this.setState({ postId: this.props.match.params.id });
     this.getPost();
     this.getComments();
@@ -39,6 +41,7 @@ class DetailPost extends Component {
 
     window.location.reload();
   }
+
   getMe = async () => {
     await axios.get('/api/me', {
       headers: { authorization: `Bearer ${localStorage.getItem('token')}` },
@@ -55,7 +58,8 @@ class DetailPost extends Component {
       })
       .catch((error) => {
         this.setState({ userName: '' });
-        console.log('로그인되어있지 않습니다.');
+        console.log(error);
+        console.log('로그인이 필요합니다');
       });
   }
 
@@ -105,13 +109,17 @@ class DetailPost extends Component {
     const token = localStorage.getItem('token');
     console.log(payload);
     console.log(localStorage.getItem('token'));
+    if (payload.length === 0) {
+      alert('댓글 내용을 입력해주세요');
+      return;
+    }
     await axios
       .post('/api/create-comment/' + this.props.match.params.id,
         { contents: payload },
         { headers: { authorization: `Bearer ${token}` } })
       .then((res) => {
         console.log(res.data);
-        alert('코멘트 생성!');
+        alert('댓글 생성!');
         window.location.reload();
       }).catch((error) => {
         if (error.response) {
@@ -119,8 +127,9 @@ class DetailPost extends Component {
         }
         else {
           console.log(error);
-          alert('코멘트 생성 실패!');
+          alert('댓글 실패!');
         }
+        this.props.history.push("/login");
       });
   }
 
@@ -168,7 +177,7 @@ class DetailPost extends Component {
               <div>{comments.length} 개의 코멘트가 있습니다.</div>
               {comments.map((data, index) => (
                 <div key={index}>
-                  <Comment comment={data} />
+                  <Comment userName={userName} comment={data} />
                   <div>" -------- Comment end----------- "</div>
                 </div>
               ))}

@@ -7,8 +7,20 @@ import authMiddleware from '../middlewares/authMiddleware.js';
 const router = express.Router();
 
 const userPostSchema = joi.object({
-  userName: joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')),
-  password: joi.string().min(4),
+  userName: joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$'))
+    .error((errors) => {
+      errors.forEach((err) => {
+        err.message = `아이디 형식이 일치하지 않습니다.`;
+      });
+      return errors;
+    }),
+  password: joi.string().pattern(new RegExp('^[a-zA-Z0-9]{4,30}$'))
+    .error((errors) => {
+      errors.forEach((err) => {
+        err.message = `패스워드 형식이 일치하지 않습니다.`;
+      });
+      return errors;
+    }),
   confirmPassword: joi.ref('password'),
 });
 
@@ -18,7 +30,7 @@ const getMe = async (req, res, next) => {
   next();
 };
 
-const join = async (req, res) => {
+export const join = async (req, res) => {
   try {
     const { userName, password, confirmPassword } =
       await userPostSchema.validateAsync(req.body)
@@ -29,7 +41,12 @@ const join = async (req, res) => {
 
     const existId = await User.findOne({ userName });
     if (existId) {
-      return res.status(400).send({ message: '이미 존재하는 아이디입니다' });
+      return res.status(400).send({ message: '중복된 닉네임입니다.' });
+    }
+
+    const sameNamePwd = userName === password;
+    if (sameNamePwd) {
+      return res.status(400).send({ message: '아이디와 비밀번호가 달라야 합니다. ' });
     }
 
     const user = new User({ userName, password, date });
@@ -43,7 +60,6 @@ const join = async (req, res) => {
 
 const login = async (req, res) => {
   const { userName, password } = req.body;
-  console.log(req.body);
   const user = await User.findOne({ userName, password });
   if (!user) {
     res.status(401).send({
@@ -51,7 +67,6 @@ const login = async (req, res) => {
     });
     return;
   }
-
   const token = jwt.sign({ user: user.userName }, 'young');
   res.send({ token });
 };

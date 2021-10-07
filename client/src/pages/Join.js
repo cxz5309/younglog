@@ -32,7 +32,8 @@ class Join extends Component {
         }
       })
       .catch((error) => {
-        console.log('로그인되어있지 않습니다.');
+        console.log(error);
+        console.log('로그인이 필요합니다');
       });
   }
 
@@ -44,7 +45,7 @@ class Join extends Component {
       .then((res) => {
         console.log(res.data);
         alert('회원가입 성공!');
-        this.props.history.push("/")
+        this.props.history.push("/login")
       })
       .catch((error) => {
         if (error.response) {
@@ -68,7 +69,7 @@ class Join extends Component {
     return (
       <main className="sign-page">
         <div className="container">
-          <div className="row travel-group">
+          <div className="row">
             <div className="col-12">
               <h1>회원가입</h1>
             </div>

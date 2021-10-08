@@ -11,13 +11,11 @@ class Post extends Component {
         userPwd: "",
         title: "",
         description: "",
-        thumbnail: "",
         date: "",
         views: 0,
       },
     };
   }
-
 
   componentDidMount() {
     this.setState({ readyPost: this.props.data })
@@ -29,19 +27,20 @@ class Post extends Component {
     const date = this.state.readyPost.date;
     const username = this.state.readyPost.userName;
     const description = this.state.readyPost.description;
-    const thumbnail = this.state.readyPost.thumbnail;
     return (
-      <Link to={`/read-post/${id}`}>
-        <article>
-          <div className="popular-content">
-            <div className="popular-title">{title}</div>
-            <div className="popular-info row">
-              <div className="created-date">{date}</div>
-              <div className="writer">{username}</div>
+      <Link to={'/read-post/' + id} >
+        <article className="row">
+          {/* <div className="thumbnail-box col-3">
+            <img className="thumbnail" src="<%= contents[i].thumbnail %>" alt="썸네일" className="col-3"></img>
+          </div> */}
+          <div className="list-content col-9">
+            <div className="list-title">{title}</div>
+            <div className="list-info row">
+              <div className="created-date col-3">{date}</div>
+              <div className="writer col-9">{username}</div>
             </div>
-            <div className="popular-desc">
-              <div>{description}</div>
-              <div>{thumbnail}</div>
+            <div className="list-desc">
+              {description}
             </div>
           </div>
         </article>

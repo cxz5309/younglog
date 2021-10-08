@@ -1,6 +1,5 @@
 import { Component } from 'react';
 import axios from 'axios';
-import { Route } from 'react-router-dom'
 import { Link } from "react-router-dom";
 
 class Login extends Component {
@@ -23,7 +22,6 @@ class Login extends Component {
     await axios.get('/api/me', {
       headers: { authorization: `Bearer ${localStorage.getItem('token')}` },
     }).then((res) => {
-      console.log(res.data);
       alert('이미 로그인되어있어 메인 페이지로 이동합니다.');
       this.props.history.push("/")
     })
@@ -32,10 +30,8 @@ class Login extends Component {
   login = async (e) => {
     e.preventDefault();
     const payload = this.state.readyUser;
-
     await axios.post('/api/login', payload)
       .then((res) => {
-        console.log(res.data);
         localStorage.setItem('token', res.data.token);
         alert('로그인되었습니다!');
         this.props.history.push("/")
@@ -60,30 +56,27 @@ class Login extends Component {
 
   render() {
     return (
-      <main className="sign-page">
-        <div className="container">
-          <div className="row">
-            <div className="col-12">
-              <h1>로그인</h1>
-            </div>
-            <form>
-              <div className="col-12">
-                <div className="login-group">
-                  <label htmlFor="userName">UserName</label><br />
-                  <input type="username" id="userName" name="userName" placeholder="UserName" className="sign-input" onChange={this.handleChange}></input><br /><br />
-                  <label htmlFor="userpw">Password</label><br />
-                  <input type="password" id="userpw" name="password" placeholder="Password"
-                    className="sign-input" onChange={this.handleChange}></input><br /><br />
-                </div>
-              </div>
-              <div className="col-12">
-                <button type="submit" onClick={this.login} className="box-btn login-box">로그인</button>
-                <button className="box-btn">
-                  <Link to="/join">회원가입</Link>
-                </button>
-              </div>
-            </form>
+      <main>
+        <div className='login-container'>
+          <div>
+            <h1>로그인</h1>
           </div>
+          <form>
+            <div>
+              <div className="login-group">
+                <form>
+                  <label>닉네임</label><br />
+                  <input type="username" id="userName" name="userName" onChange={this.handleChange}></input><br /><br />
+                  <label>비밀번호</label><br />
+                  <input type="password" id="userpw" name="password" onChange={this.handleChange}></input><br /><br />
+                </form>
+              </div>
+            </div>
+            <div>
+              <button type="submit" onClick={this.login} className="login-box">로그인</button>
+              <Link to="/join"><button>회원가입</button></Link>
+            </div>
+          </form>
         </div>
       </main>
     )

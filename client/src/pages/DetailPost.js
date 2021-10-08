@@ -1,9 +1,8 @@
 import { Component } from 'react';
 import axios from 'axios';
-import { Redirect, useHistory, useParams } from 'react-router-dom'
 import Header from '../components/Header';
-import Comment from '../components/Home/Comment/Comment';
-import { headers } from './../constants/constants';
+import Comment from '../components/Comment/Comment';
+import Footer from '../components/Footer';
 
 class DetailPost extends Component {
   constructor() {
@@ -26,10 +25,7 @@ class DetailPost extends Component {
   }
 
   componentDidMount() {
-    console.log(this.props.match.params.id);
-    console.log(this.setState.userName);
     this.getMe();
-    console.log(this.setState.userName);
     this.setState({ postId: this.props.match.params.id });
     this.getPost();
     this.getComments();
@@ -53,7 +49,7 @@ class DetailPost extends Component {
         }
         else {
           this.setState({ userName: '' });
-          throw '알수 없는 오류가 있어 로그인되지 않았습니다.';
+          throw new Error('알수 없는 오류가 있어 로그인되지 않았습니다.');
         }
       })
       .catch((error) => {
@@ -66,7 +62,6 @@ class DetailPost extends Component {
   getPost = async () => {
     await axios.get('/api/read-post/' + this.props.match.params.id)
       .then((res) => {
-        console.log(res.data);
         this.setState({ readyPost: res.data.post });
       })
       .catch((error) => {
@@ -84,7 +79,6 @@ class DetailPost extends Component {
   getComments = async () => {
     await axios.get('/api/comments/' + this.props.match.params.id)
       .then((res) => {
-        console.log(res.data);
         this.setState({ readyComments: res.data.comments });
       }).catch((error) => {
         console.log('오류로 인해 댓글이 표시되지 않습니다.')
@@ -107,8 +101,6 @@ class DetailPost extends Component {
     e.preventDefault();
     let payload = this.state.myComment;
     const token = localStorage.getItem('token');
-    console.log(payload);
-    console.log(localStorage.getItem('token'));
     if (payload.length === 0) {
       alert('댓글 내용을 입력해주세요');
       return;
@@ -118,7 +110,6 @@ class DetailPost extends Component {
         { contents: payload },
         { headers: { authorization: `Bearer ${token}` } })
       .then((res) => {
-        console.log(res.data);
         alert('댓글 생성!');
         window.location.reload();
       }).catch((error) => {
@@ -148,8 +139,9 @@ class DetailPost extends Component {
   render() {
     const title = this.state.readyPost.title;
     const date = this.state.readyPost.date.valueOf();
-    const postuserName = this.state.readyPost.userName;
+    const postUserName = this.state.readyPost.userName;
     const description = this.state.readyPost.description;
+    const views = this.state.readyPost.views;
     let userName = this.state.userName;
     let comments = this.state.readyComments === undefined ? [] : this.state.readyComments
 
@@ -158,37 +150,40 @@ class DetailPost extends Component {
         <Header userName={userName} logout={this.logout} />
         <main>
           <section>
-            <div className="content-header">
-              <h1 className="read-title">{title}</h1>
-              <div className="read-info row">
-                <div className="created-date col-3">{date}</div>
-                <div className="writer col-9">{postuserName}</div>
-              </div>
-            </div>
-            <div className="read-content">
-              <div className="desc">{description}</div>
-            </div>
-            <div className="comments">
-              <div className="myComment">
-                <input type="text" name="myComment" id="content" onChange={this.handleChange} value={this.state.myComment} /> <br />
-                <button onClick={this.RemoveThisComment}>취소</button>
-                <button onClick={this.CreateComment}>댓글</button>
-              </div>
-              <div>{comments.length} 개의 코멘트가 있습니다.</div>
-              {comments.map((data, index) => (
-                <div key={index}>
-                  <Comment userName={userName} comment={data} />
-                  <div>" -------- Comment end----------- "</div>
+            <div className="read-page">
+              <div className="content-header">
+                <h1 className="read-title">{title}</h1>
+                <div className="read-info row">
+                  <div className="created-date">{date}</div>
+                  <div className="writer">{postUserName}</div>
                 </div>
-              ))}
-            </div>
-            {userName.length > 0 && (
-              <div className="btn">
-                <input type="button" onClick={this.handleClick} value="게시글 수정 및 삭제"></input>
               </div>
-            )}
+              <div className="read-content">
+                <div className="desc">{description}</div>
+                <div className="views">조회수 : {views}</div>
+              </div>
+              {userName.length > 0 && (
+                <div className="btn">
+                  <input type="button" onClick={this.handleClick} value="게시글 수정 & 삭제"></input>
+                </div>
+              )}
+              <div className="comments">
+                <div className="myComment">
+                  <input type="text" name="myComment" id="content" onChange={this.handleChange} value={this.state.myComment} />
+                  <button onClick={this.RemoveThisComment}>취소</button>
+                  <button onClick={this.CreateComment}>댓글</button>
+                </div>
+                <div>{comments.length} 개의 코멘트가 있습니다.</div>
+                {comments.map((data, index) => (
+                  <div key={index}>
+                    <Comment userName={userName} comment={data} />
+                  </div>
+                ))}
+              </div>
+            </div>
           </section>
         </main>
+        <Footer />
       </div>
     )
   }

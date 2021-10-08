@@ -1,7 +1,5 @@
 import { Component } from 'react';
 import axios from 'axios';
-import { Route } from 'react-router-dom'
-import { Link } from "react-router-dom";
 
 class Join extends Component {
   constructor() {
@@ -26,7 +24,6 @@ class Join extends Component {
     })
       .then((res) => {
         if (res.data.user) {
-          console.log(res.data);
           alert('이미 로그인되어있어 메인 페이지로 이동합니다.');
           this.props.history.push("/")
         }
@@ -43,7 +40,6 @@ class Join extends Component {
 
     await axios.post('/api/join', payload)
       .then((res) => {
-        console.log(res.data);
         alert('회원가입 성공!');
         this.props.history.push("/login")
       })
@@ -67,26 +63,24 @@ class Join extends Component {
 
   render() {
     return (
-      <main className="sign-page">
-        <div className="container">
-          <div className="row">
-            <div className="col-12">
-              <h1>회원가입</h1>
-            </div>
-            <div className="col-12">
-              <div className="login-group">
-                <form>
-                  <label>3자 이상, 알파벳 대소문자</label><br />
-                  <input type="text" name="userName" placeholder="New UserName (3자 이상)" className="sign-input" onChange={this.handleChange}></input><br />
-                  <label>4자 이상</label><br />
-                  <input type="password" name="password" placeholder="New Password (4자 이상)" className="sign-input" onChange={this.handleChange}></input><br />
-                  <label>비밀번호를 한번 더 입력해주세요.</label><br />
-                  <input type="password" name="confirmPassword" placeholder="Confirm Password" className="sign-input" onChange={this.handleChange}></input><br />
-                </form>
-              </div>
-            </div>
-            <button onClick={this.register} className="box-btn">회원가입</button>
+      <main>
+        <div className='join-container'>
+          <div>
+            <h1>회원가입</h1>
           </div>
+          <div>
+            <div className="join-group">
+              <form>
+                <label>사용자 닉네임</label><br />
+                <input type="text" name="userName" placeholder="3자 이상, 알파벳 대소문자" className="sign-input" onChange={this.handleChange}></input><br />
+                <label>비밀번호</label><br />
+                <input type="password" name="password" placeholder="4자 이상" className="sign-input" onChange={this.handleChange}></input><br />
+                <label>비밀번호를 한번 더 입력해주세요.</label><br />
+                <input type="password" name="confirmPassword" placeholder="Confirm Password" className="sign-input" onChange={this.handleChange}></input><br />
+              </form>
+            </div>
+          </div>
+          <button onClick={this.register} className="box-btn">회원가입</button>
         </div>
       </main>
     )

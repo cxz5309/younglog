@@ -20,7 +20,7 @@ UserSchema.virtual('uid').get(function () {
   return this._id.toHexString();
 });
 UserSchema.set('toJSON', {
-  virtuals: true
+  virtuals: true,
 });
 
 export default mongoose.model('User', UserSchema);

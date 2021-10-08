@@ -6,6 +6,7 @@ import Posts from './pages/Posts'
 import CreatePost from './pages/CreatePost';
 import UpdatePost from './pages/UpdatePost';
 import DetailPost from './pages/DetailPost';
+import ListPost from './pages/ListPost';
 import Join from './pages/Join';
 import Login from './pages/Login';
 
@@ -20,6 +21,7 @@ class App extends Component {
           <Route exact path="/create-post" component={CreatePost} />
           <Route exact path="/update-post/:id" component={UpdatePost} />
           <Route exact path="/read-post/:id" component={DetailPost} />
+          <Route exact path="/list-post/:sortType" component={ListPost} />
           <Switch>
             <Route path="/about/:name" component={About} />
             <Route path="/about" component={About} />

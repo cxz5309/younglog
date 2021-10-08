@@ -7,13 +7,17 @@ class PopularList extends Component {
   render() {
     return (
       <div className='popular-post-box'>
-        <div className='popular-header row'>
+        <div className='popular-header'>
           <div className='title'>Popular post</div>
-          <Link to='/list-post' className='view-all'>View all</Link>
+          <div className='view-all'>
+            <Link to='/list-post/popular' >View all</Link>
+          </div>
         </div>
         <div className='contents-box row'>
           {this.props.datas.map((data, index) => (
-            <Post data={data} />
+            <div key={index}>
+              <Post data={data} />
+            </div>
           ))}
         </div>
       </div>

@@ -1,5 +1,8 @@
 import express from 'express';
+import multer from 'multer';
+import path from 'path';
 import Post from '../schemas/Post.js';
+import { postDateParser } from '../util.js';
 
 const router = express.Router();
 
@@ -7,19 +10,31 @@ const getHomePosts = async (req, res) => {
   const popularPosts = await Post.find({}).sort('-views').limit(2);
   const recentPosts = await Post.find({}).sort('-date');
 
-  res.send({ popularList: popularPosts, recentList: recentPosts });
+  const newPopularPosts = popularPosts.map((val) => postDateParser(val));
+  const newRecentPosts = recentPosts.map((val) => postDateParser(val));
+
+  res.send({ popularList: newPopularPosts, recentList: newRecentPosts });
 };
+
+const storage = multer.diskStorage({
+  destination: path.join(path.resolve(), '/public/image/'),
+  filename(req, file, cb) {
+    console.log(file);
+    cb(null, `${file.originalname}`);
+  },
+});
+
+const upload = multer({ storage });
 
 const postCreatePost = async (req, res, next) => {
   const { title, description, userName, userPwd } = req.body;
-  console.log(req.body);
-  const thumbnailUrl = req.file ? 'image/' + req.file.filename : 'image/zero-w-logo_mini.png';
+  const thumbnailUrl = req.file ? '/image/' + req.file.filename : '/image/zero-w-logo_mini.png';
   const views = 0;
   const date = new Date();
   // db create
   try {
     await Post.create({
-      title, description, userName, userPwd, date, views,
+      title, description, userName, userPwd, date, views, thumbnail: thumbnailUrl,
     });
     return res.send({ message: '게시글을 생성하였습니다' });
   } catch (error) {
@@ -32,13 +47,16 @@ const getReadPost = async (req, res) => {
 
   const thisPost = await Post.findById(id);
   await thisPost.updateOne({ $inc: { views: 1 } });
-  return res.send({ post: thisPost });
+  const newPost = postDateParser(thisPost);
+
+  return res.send({ post: newPost });
 };
 
 const getUpdatePost = async (req, res) => {
   const { id } = req.params;
 
   const thisPost = await Post.findById(id);
+
   res.send({ post: thisPost });
 };
 
@@ -54,7 +72,7 @@ const patchUpdatePost = async (req, res) => {
     await thisPost.updateOne({
       $set: {
         title, userName, userPwd, description,
-      }
+      },
     });
     return res.send({ message: '게시글을 수정하였습니다' });
   } catch (error) {
@@ -78,13 +96,28 @@ const deletePost = async (req, res) => {
   }
 };
 
+const listPost = async (req, res) => {
+  const { sortType } = req.params;
+
+  let postList = [];
+  if (sortType === 'popular') {
+    postList = await Post.find({}).sort('-views');
+  } else if (sortType === 'recent') {
+    postList = await Post.find({}).sort('-date');
+  }
+
+  const newPostList = postList.map((val) => postDateParser(val));
+  res.send({ postList: newPostList });
+};
+
 router.get('/', getHomePosts);
 
-router.post('/create-post', postCreatePost);
+router.post('/create-post', upload.single('file'), postCreatePost);
 router.get('/read-post/:id', getReadPost);
 router
   .get('/update-post/:id', getUpdatePost)
   .patch('/update-post/:id', patchUpdatePost);
 router.delete('/delete-post/:id', deletePost);
+router.get('/list-post/:sortType', listPost);
 
 export default router;

@@ -28,21 +28,22 @@ class Post extends Component {
     const date = this.state.readyPost.date.valueOf();
     const username = this.state.readyPost.userName;
     const description = this.state.readyPost.description;
+    const thumbnail = this.state.readyPost.thumbnail;
     return (
-
       <Link to={'/read-post/' + id} >
-        <article className="row">
-          <div className="thumbnail-box col-3">
+        <article className="recent-box row">
+          <div className="thumbnail-box">
             {/* <img className="thumbnail col-3" src="<%= recentPosts[i].thumbnail %>" alt="썸네일"/> */}
           </div>
-          <div className="recent-content col-9">
+          <div className="recent-content">
             <div className="recent-title">{title}</div>
             <div className="recent-info row">
-              <div className="created-date col-3">{date}</div>
-              <div className="writer col-9">{username}</div>
+              <div className="created-date">{date}</div>
+              <div className="writer">{username}</div>
             </div>
             <div className="recent-desc">
               {description}
+              <div>{thumbnail}</div>
             </div>
           </div>
         </article>

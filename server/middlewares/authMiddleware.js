@@ -1,5 +1,8 @@
+import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
 import User from '../schemas/User.js';
+
+dotenv.config();
 
 const authMiddleware = async (req, res, next) => {
   const { authorization } = req.headers;
@@ -22,8 +25,10 @@ const authMiddleware = async (req, res, next) => {
   }
 
   try {
-    const { user } = jwt.verify(tokenValue, 'young');
-    await User.findOne({ userName: user }) // id 에서 user차저
+    // jwt를 통한 로그인 토큰 확인
+    const { user } = jwt.verify(tokenValue, process.env.JWT_SECRET_Key);
+
+    await User.findOne({ userName: user })
       .then((user) => {
         // console.log("find id");
         res.locals.user = user;

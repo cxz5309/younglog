@@ -21,6 +21,7 @@
   --width-card-medium: 460px;
   --width-card-wide: 800px;
   --width-content: 1080px;
+  box-sizing: border-box;
 }
 
 /*
@@ -120,18 +121,6 @@ header {
   text-align: var(--justify-important);
 }
 
-header a b,
-header a em,
-header a i,
-header a strong {
-  margin-left: 0.5rem;
-  margin-right: 0.5rem;
-}
-
-header nav img {
-  margin: 1rem 0;
-}
-
 /* Nav */
 nav {
   align-items: center;
@@ -143,14 +132,6 @@ nav {
   right: 0;
   z-index: 1;
   background-color: #fff;
-}
-
-nav .nav-items {
-  align-items: center;
-}
-
-nav .nav-item {
-  font-size: 1.5vh;
 }
 
 /* Typography */
@@ -395,16 +376,58 @@ main {
 
 .row {
   display: flex;
+  flex-direction: row;
+}
+
+.header-box{
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  width: 100%;
+}
+
+.logo-box {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
 }
 
 .header-logo img {
-  width: 6.250em;
+  margin: 1rem;
+  width: 12.250em;
   height: 3.125em;
   object-fit: contain;
 }
 
+.nav-items {
+  grid-column:-3 / -1;
 
-section.headline article {
+  display: flex;
+  margin: 1rem;
+
+  justify-content: space-around;
+  align-items: center;
+}
+
+.nav-item {
+  margin: 16px;
+  font-size: 2vh;
+}
+
+.headline-box {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  width: 100%;
+  padding: 5%;
+}
+
+.info-box {
+  grid-column:1 / 2;
+}
+.avatar-box {
+  grid-column:3 / 4;
+}
+
+.headline article {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -412,13 +435,13 @@ section.headline article {
   padding: 0;
 }
 
-section.headline .title {
+.headline .title {
   margin: 0;
   height: 2.75em;
   font: bold 2.750em 'Jua', sans-serif;
 }
 
-section.headline .description {
+.headline .description {
   margin: 0;
   height: 4.125em;
   display: flex;
@@ -426,21 +449,21 @@ section.headline .description {
   font: normal 1em 'Jua', sans-serif;
 }
 
-section.headline .btn {
+.headline .btn {
   margin: 0;
   display: flex;
   align-items: center;
 }
 
 
-section.headline .btn input {
+.headline .btn input {
   color: #fff;
   background-color: #FF6464;
   font: medium 1.250em 'Jua', sans-serif;
 }
 
 
-section.read-post .btn {
+.read-post .btn {
   width: 100%;
   margin: 0;
   display: flex;
@@ -449,30 +472,30 @@ section.read-post .btn {
 }
 
 
-section.read-post .btn input {
+.read-post .btn input {
   color: #fff;
   background-color: #64FFA2;
   font: medium 1.250em 'Jua', sans-serif;
 }
 
-section.headline .user-avatar {
+.headline .user-avatar {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-section.headline .user-avatar img {
+.headline .user-avatar img {
   width: 15.188em;
   height: 15.188em;
   object-fit: cover;
 }
 
 
-section.popular-post {
+.popular-post {
   background-color: #EDF7FA;
 }
 
-section.popular-post article {
+.popular-post article {
   width: 400px;
   height: 30vh;
   display: flex;
@@ -481,22 +504,22 @@ section.popular-post article {
   border-radius: 20px;
 }
 
-section.popular-post article:hover {
+.popular-post article:hover {
   border-color: #43A9D4;
 }
 
-section.popular-post article:active {
+.popular-post article:active {
   border-color: #125FC5;
 }
 
-section.recent-post .contents-box {
+.recent-post .contents-box {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-flow: column;
 }
 
-section.recent-post article {
+.recent-post article {
   width: 858px;
   height: 30vh;
   display: flex;
@@ -504,44 +527,40 @@ section.recent-post article {
   border-radius: 20px;
 }
 
-section.recent-post article:hover {
+.recent-post article:hover {
   border-color: #43A9D4;
 }
 
-section.recent-post article:active {
+.recent-post article:active {
   border-color: #125FC5;
 }
 
-section .headline-box {
-  width: 100%;
-}
-
-section .popular-post-box {
+ .popular-post-box {
   width: 100%;
   padding: 30px;
 }
 
-section .recent-post-box {
+ .recent-post-box {
   width: 100%;
   padding: 15px;
 }
 
-section .content-header {
+ .content-header {
   width: 100%;
   padding: 15px;
 }
 
-section .read-content {
+ .read-content {
   width: 100%;
   padding: 15px;
 }
 
-section .list-contents {
+ .list-contents {
   width: 100%;
   padding: 15px;
 }
 
-section .create-content {
+ .create-content {
   width: 100%;
   padding: 15px;
   display: flex;
@@ -549,11 +568,11 @@ section .create-content {
 }
 
 
-section .update-content form {
+ .update-content form {
   width: 100%;
 }
 
-section .update-content {
+ .update-content {
   width: 100%;
   margin: 5% 10% 0%;
   padding: 15px;
@@ -561,28 +580,36 @@ section .update-content {
   justify-content: center;
 }
 
-section .create-content form {
+ .create-content form {
   width: 100%;
 }
 
-section.popular-post .popular-header {
+.popular-post .popular-header {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   align-items: center;
-  margin-bottom: 2vh;
+  margin: 0 2vw 2vh;
 }
 
 .popular-header .title {
+  grid-column:1 / 2;
+
   font: 1.375em 'Jua', sans-serif;
   height: 1.875em;
 }
 
 .popular-header .view-all {
+  grid-column:-2 / -1;
+  display: flex;
+  justify-content: flex-end;
+
   font: 1em 'Jua', sans-serif;
   color: #00A8CC;
   height: 1.500em;
 }
 
 
-section .popular-post-box .contents-box {
+ .popular-post-box .contents-box {
   justify-content: space-around;
   align-items:center;
 }
@@ -605,9 +632,20 @@ section .popular-post-box .contents-box {
 }
 
 .popular-content .popular-info {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+
   font: 1.125em 'Jua', sans-serif;
   align-self: stretch;
   height: 20%;
+}
+
+.popular-info .created-date{
+  grid-column:1 / 2;
+}
+
+.popular-info .writer{
+  grid-column:2 / 3;
 }
 
 .popular-content .popular-desc {
@@ -631,22 +669,38 @@ section .popular-post-box .contents-box {
 
 
 .recent-header {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  margin: 0 2% 0;
+
   align-items: center;
 }
 
 .recent-header .title {
+  grid-column:1 / 2;
+
   font: 1.375em 'Jua', sans-serif;
   line-height: 1.875em;
 }
 
 .recent-header .view-all {
+  grid-column:-2 / -1;
+  display: flex;
+  justify-content: flex-end;
+
   font: 1em 'Jua', sans-serif;
   color: #00A8CC;
   line-height: 1.500em;
 }
 
+.recent-box {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
 .recent-content,
 .list-content {
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -663,6 +717,9 @@ section .popular-post-box .contents-box {
 .recent-content .recent-info,
 .list-content .list-info,
 .content-header .read-info {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+
   align-items: center;
   align-self: stretch;
 }
@@ -670,6 +727,8 @@ section .popular-post-box .contents-box {
 .recent-content .recent-info .created-date,
 .list-content .list-info .created-date,
 .content-header .read-info .created-date {
+  grid-column:1 / 2;
+
   font: bold 1.125em 'Jua', sans-serif;
   text-align: center;
   background-color: #142850;
@@ -680,6 +739,9 @@ section .popular-post-box .contents-box {
 .recent-content .recent-info .writer,
 .list-content .list-info .writer,
 .content-header .read-info .writer {
+  grid-column:2 / 3;
+  text-align: center;
+
   font: medium 1.250em 'Jua', sans-serif;
   color: #8695A4;
 }
@@ -688,6 +750,7 @@ section .popular-post-box .contents-box {
   font: 1.000em 'Jua', sans-serif;
   height: 5.813em;
   color: #21243D;
+  margin: 2% 2% 0;
 }
 
 .read-title {
@@ -704,4 +767,56 @@ section .popular-post-box .contents-box {
 .link a {
   color: #212529;
   margin: 10px;
+}
+
+.join-container,
+.login-container,
+.create-post-container,
+.update-post-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: stretch;
+}
+
+.join-group,
+.login-group,
+.create-post-group,
+.update-post-group {
+  width: 80vh;
+}
+
+.join-group form,
+.login-group form,
+.create-post-group form
+.update-post-group form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: stretch;
+}
+
+.join-group form input,
+.login-group form input,
+.create-post-group form input,
+.create-post-group form textarea,
+.update-post-group form input,
+.update-post-group form textarea {
+  width: 95%;
+}
+
+.read-page {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+
+.comments {
+  padding: 2%;
+  background-color:gainsboro;
+  border: #fff;
+  border-radius: 20px;
 }

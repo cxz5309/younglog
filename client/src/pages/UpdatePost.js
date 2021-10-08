@@ -1,7 +1,5 @@
 import { Component } from 'react';
 import axios from 'axios';
-import { Redirect, useHistory } from 'react-router-dom'
-import Header from '../components/Header';
 class UpdatePost extends Component {
   constructor() {
     super();
@@ -15,14 +13,12 @@ class UpdatePost extends Component {
         date: new Date(),
         views: 0,
       },
-      postId: '',
       userName: '',
       submitType: 'update',
     };
   }
 
   componentDidMount() {
-    this.setState({ postId: this.props.match.params.id });
     this.getMe();
     this.getPost();
   };
@@ -39,7 +35,7 @@ class UpdatePost extends Component {
         }
         else {
           this.setState({ userName: '' });
-          throw '알수 없는 오류가 있어 로그인되지 않았습니다.';
+          throw new Error('알수 없는 오류가 있어 로그인되지 않았습니다.');
         }
       })
       .catch((error) => {
@@ -52,9 +48,8 @@ class UpdatePost extends Component {
 
   getPost = async () => {
     try {
-      await axios.get('/api/update-post/' + this.state.postId)
+      await axios.get('/api/update-post/' + this.props.match.params.id)
         .then((res) => {
-          console.log(res.data);
           this.setState({ readyPost: res.data.post });
           let readyPost = { ...this.state.readyPost }
           readyPost['userPwd'] = '';
@@ -71,13 +66,11 @@ class UpdatePost extends Component {
   handleSubmit = async (e) => {
     e.preventDefault();
     let payload = this.state.readyPost;
-    console.log(payload);
 
     if (this.state.submitType === 'update') {
       await axios
-        .patch('/api/update-post/' + this.state.postId, payload)
+        .patch('/api/update-post/' + this.props.match.params.id, payload)
         .then((res) => {
-          console.log(res.data);
           alert('업데이트 성공!');
           this.props.history.push("/")
         }).catch((error) => {
@@ -95,13 +88,12 @@ class UpdatePost extends Component {
     else {
       const userPwd = this.state.readyPost.userPwd;
       await axios
-        .delete('/api/delete-post/' + this.state.postId, {
+        .delete('/api/delete-post/' + this.props.match.params.id, {
           data: {
             userPwd,
           }
         })
         .then((res) => {
-          console.log(res.data);
           alert('삭제 성공!');
           this.props.history.push("/")
         })
@@ -129,33 +121,31 @@ class UpdatePost extends Component {
     return (
       <div>
         <main>
-          <section>
-            <form onSubmit={this.handleSubmit}>
-              <label className="form-label">제목</label>
-              <div className="input-group mb-3 input-group-lg">
+          <section className='update-post-container'>
+            <div className="update-post-group">
+              <form onSubmit={this.handleSubmit}>
+                <label className="form-label">제목</label>
                 <input type="text" id="title" className="form-control" name="title" value={this.state.readyPost.title} onChange={this.handleChange}></input>
-              </div>
-              <label className="form-label">작성자</label>
-              <div className="input-group mb-3">
+
+                <label className="form-label">작성자</label>
                 <input type="text" id="writer" className="form-control" name="userName" value={this.state.readyPost.userName} onChange={this.handleChange}></input>
-              </div>
-              <label className="form-label">비밀번호</label>
-              <div className="input-group mb-3">
+
+                <label className="form-label">비밀번호</label>
                 <input type="text" id="password" className="form-control" name="userPwd" value={this.state.readyPost.userPwd} onChange={this.handleChange}></input>
-              </div>
-              <label className="form-label">내용</label>
-              <div className="input-group mb-3">
+
+                <label className="form-label">내용</label>
                 <textarea id="description" className="form-control" name="description" value={this.state.readyPost.description} onChange={this.handleChange}></textarea>
-              </div>
-              <label className="form-label">썸네일</label>
-              {/* <div className="input-group mb-3">
+
+                {/* <label className="form-label">썸네일</label> */}
+                {/* <div className="input-group mb-3">
               <input type="file" className="form-control" id="thumbnail" name="thumbnail" accept='image/jpg, image/png, image/jpeg' ></input>
             </div> */}
-              <div>
-                <button type="submit" className="btn btn-primary mb-3" onClick={() => { this.setState({ submitType: 'update' }) }}>게시물 수정</button>
-                <button type="submit" className="btn btn-primary mb-3" onClick={() => { this.setState({ submitType: 'delete' }) }}>게시물 삭제</button>
-              </div>
-            </form>
+                <div>
+                  <button type="submit" className="btn btn-primary mb-3" onClick={() => { this.setState({ submitType: 'update' }) }}>게시물 수정</button>
+                  <button type="submit" className="btn btn-primary mb-3" onClick={() => { this.setState({ submitType: 'delete' }) }}>게시물 삭제</button>
+                </div>
+              </form>
+            </div>
           </section>
         </main>
       </div>

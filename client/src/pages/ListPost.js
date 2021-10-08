@@ -1,21 +1,17 @@
 import { Component } from 'react';
 import axios from 'axios';
-import PopularList from '../components/Home/PopularList/PopularList';
-import RecentList from '../components/Home/RecentList/RecentList';
 import Header from '../components/Header';
-import Headline from '../components/Home/Headline/Headline';
 import Footer from '../components/Footer';
+import Post from '../components/ListPost/Post';
 
-class Home extends Component {
+class ListPost extends Component {
   constructor() {
     super();
     this.state = {
-      pList: [],
-      rList: [],
+      postList: [],
       userName: '',
     };
   }
-
 
   // date: "2021. 9. 29."
   // description: "r"
@@ -62,10 +58,10 @@ class Home extends Component {
   }
 
   getList = async () => {
-    await axios.get('/api')
+    await axios.get('/api/list-post/' + this.props.match.params.sortType)
       .then((res) => {
-        this.setState({ pList: res.data.popularList })
-        this.setState({ rList: res.data.recentList })
+        console.log(res);
+        this.setState({ postList: res.data.postList })
       })
       .catch((error) => {
         if (error.response) {
@@ -81,21 +77,27 @@ class Home extends Component {
   }
 
   render() {
-    let popularData = [...this.state.pList];
-    let recentData = [...this.state.rList];
+    let postList = [...this.state.postList];
     const userName = this.state.userName;
     return (
       <div>
         <Header userName={userName} logout={this.logout} />
         <main>
-          <section className="headline">
-            <Headline />
-          </section>
-          <section className="popular-post">
-            <PopularList datas={popularData} />
-          </section>
           <section className="recent-post">
-            <RecentList datas={recentData} />
+            <div className="content-header">
+              <h1 className="page-title">{this.props.match.params.id}</h1>
+            </div>
+            <div className="list-contents">
+              <div className="contents">
+                <div className="contents-box">
+                  {postList.map((data, index) => (
+                    <div key={index}>
+                      <Post data={data} />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
           </section>
         </main>
         <Footer />
@@ -104,4 +106,4 @@ class Home extends Component {
   }
 }
 
-export default Home;
+export default ListPost;

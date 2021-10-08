@@ -4,36 +4,36 @@ const { Schema } = mongoose;
 const PostSchema = new Schema({
   title: {
     type: String,
-    required: true
+    required: true,
   },
   userName: {
     type: String,
-    required: true
+    required: true,
   },
   userPwd: {
     type: String,
-    required: true
+    required: true,
   },
   description: {
-    type: String
+    type: String,
   },
   thumbnail: {
-    type: String
+    type: String,
   },
   date: {
     type: Date,
-    required: true
+    required: true,
   },
   views: {
-    type: Number
-  }
+    type: Number,
+  },
 });
 
 PostSchema.virtual('uid').get(function () {
   return this._id.toHexString();
 });
 PostSchema.set('toJSON', {
-  virtuals: true
+  virtuals: true,
 });
 
 export default mongoose.model('Post', PostSchema);

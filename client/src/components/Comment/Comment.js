@@ -19,7 +19,6 @@ class Comment extends Component {
   submitUpdate = async () => {
     const payload = this.state.readyUpdateContent;
     const token = localStorage.getItem('token');
-    console.log(token);
     if (payload.length === 0) {
       alert('댓글 내용을 입력해주세요');
       return;
@@ -28,7 +27,6 @@ class Comment extends Component {
       { contents: payload },
       { headers: { authorization: `Bearer ${token}` } })
       .then((res) => {
-        console.log(res.data);
         alert('코멘트가 수정되었습니다!');
         window.location.reload();
       }).catch((error) => {
@@ -44,7 +42,6 @@ class Comment extends Component {
   submitDelete = async () => {
     const payload = this.state.readyUpdateContent;
     const token = localStorage.getItem('token');
-    console.log(token);
 
     await axios.delete('/api/delete-comments/' + this.props.comment.uid,
       {
@@ -52,7 +49,6 @@ class Comment extends Component {
         headers: { authorization: `Bearer ${token}` }
       })
       .then((res) => {
-        console.log(res.data);
         alert('코멘트가 삭제되었습니다!');
         window.location.reload();
       }).catch((error) => {

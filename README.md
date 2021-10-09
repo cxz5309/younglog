@@ -1,5 +1,5 @@
 ## 최종 페이지
-![blog_page](public/image/blog_page.png)  
+![blog_page](./public/image/blog_page.png)  
 
 #### 주소: http://youngwoo.shop/
 

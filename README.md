@@ -3,6 +3,9 @@
 
 #### 주소: http://youngwoo.shop/
 
+## 개발기간
+### 9.30 ~ 10.9
+
 </br>
 
 ## 와이어프레임
@@ -62,7 +65,7 @@
 ### - 파일 업로드(multer) ✔️
 ### - 로컬 스토리지에 jsonwebtoken 넣어서 자동 로그인 ✔️
 ### - bcrypt 암호화 ✔️
-### - socket.io, sequelize(mysql) 사용은 실패했다.. ❌
+### - 시간부족으로 socket.io, sequelize(mysql) 사용은 실패했다.. ❌
    
 ## 구현
 
